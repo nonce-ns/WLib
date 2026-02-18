@@ -4357,8 +4357,13 @@ value=af.Value,
 }
 end,
 Load=function(af,ag)
+print("[WindUI Debug] Dropdown Load called. HasSelect:", af and af.Select ~= nil, "Value:", tostring(ag.value), "Type:", typeof(ag.value))
 if af and af.Select then
+print("[WindUI Debug] Dropdown calling Select with:", typeof(ag.value) == "table" and ("table["..#ag.value.."]") or tostring(ag.value))
 af:Select(ag.value)
+print("[WindUI Debug] Dropdown Select completed. New Value:", tostring(af.Value))
+else
+warn("[WindUI Debug] Dropdown element missing Select method!")
 end
 end
 },
@@ -4554,23 +4559,33 @@ __custom={}
 al=am
 end
 
+print("[WindUI Debug] === LOAD START ===")
+print("[WindUI Debug] PendingFlags count:", ad.PendingFlags and (function() local c=0 for _ in next,ad.PendingFlags do c=c+1 end return c end)() or 0)
+print("[WindUI Debug] Elements count before merge:", (function() local c=0 for _ in next,ai.Elements do c=c+1 end return c end)())
+
 if ad.PendingFlags then
 for am,an in next,ad.PendingFlags do
 ai:Register(am,an)
 end
 end
 
+print("[WindUI Debug] Elements count after merge:", (function() local c=0 for _ in next,ai.Elements do c=c+1 end return c end)())
+print("[WindUI Debug] Saved elements count:", al.__elements and (function() local c=0 for _ in next,al.__elements do c=c+1 end return c end)() or 0)
+
 for am, an in next, (al.__elements or {}) do
-    if ai.Elements[am] and ae.Parser[an.__type] then
-        -- print("[WindUI Debug] Loading:", am, "Type:", an.__type, "Value:", tostring(an.value))
+    local hasElement = ai.Elements[am] ~= nil
+    local hasParser = an.__type and ae.Parser[an.__type] ~= nil
+    if hasElement and hasParser then
+        print("[WindUI Debug] Loading:", am, "Type:", an.__type, "Value:", tostring(an.value))
         local ok, err = pcall(function()
             ae.Parser[an.__type].Load(ai.Elements[am], an)
         end)
         if not ok then warn("[WindUI Debug] Error loading:", am, err) end
     else
-        -- print("[WindUI Debug] Missing element/parser for:", am)
+        warn("[WindUI Debug] SKIP:", am, "HasElement:", hasElement, "HasParser:", hasParser, "Type:", tostring(an.__type))
     end
 end
+print("[WindUI Debug] === LOAD END ===")
 
 ai.CustomData=al.__custom or{}
 

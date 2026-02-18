@@ -4613,30 +4613,6 @@ end)
 
 if aj and ak and ak.__autoload then
 ai.AutoLoad=true
-
-task.spawn(function()
-task.wait(2)
-if ad.PendingFlags then
-for ak,al in next,ad.PendingFlags do
-ai:Register(ak,al)
-end
-end
-if ad.CurrentConfig and ad.CurrentConfig~=ai and ad.CurrentConfig.Elements then
-for ak,al in next,ad.CurrentConfig.Elements do
-if not ai.Elements[ak]then
-ai:Register(ak,al)
-end
-end
-end
-local al,am=pcall(function()
-return ai:Load()
-end)
-if al and am~=false then
-print("[ WindUI.ConfigManager ] AutoLoaded config: "..ag)
-else
-warn("[ WindUI.ConfigManager ] Failed to AutoLoad config: "..ag.." - "..tostring(am))
-end
-end)
 end
 end
 

@@ -4395,10 +4395,11 @@ __type=af.__type,
 value=af.Value.Default,
 }
 end,
-Load=function(af,ag)
-if af and af.Set then
-af:Set(tonumber(ag.value))
-end
+Load = function(af, ag)
+    if af and af.Set then
+        -- print("[WindUI Debug] Slider Load:", tostring(ag.value), "Num:", tonumber(ag.value))
+        af:Set(tonumber(ag.value))
+    end
 end
 },
 Toggle={
@@ -4408,10 +4409,11 @@ __type=af.__type,
 value=af.Value,
 }
 end,
-Load=function(af,ag)
-if af and af.Set then
-af:Set(ag.value)
-end
+Load = function(af, ag)
+    if af and af.Set then
+        -- print("[WindUI Debug] Toggle Load:", tostring(ag.value))
+        af:Set(ag.value)
+    end
 end
 },
 }
@@ -4558,12 +4560,16 @@ ai:Register(am,an)
 end
 end
 
-for am,an in next,(al.__elements or{})do
-if ai.Elements[am]and ae.Parser[an.__type]then
-task.spawn(function()
-ae.Parser[an.__type].Load(ai.Elements[am],an)
-end)
-end
+for am, an in next, (al.__elements or {}) do
+    if ai.Elements[am] and ae.Parser[an.__type] then
+        -- print("[WindUI Debug] Loading:", am, "Type:", an.__type, "Value:", tostring(an.value))
+        local ok, err = pcall(function()
+            ae.Parser[an.__type].Load(ai.Elements[am], an)
+        end)
+        if not ok then warn("[WindUI Debug] Error loading:", am, err) end
+    else
+        -- print("[WindUI Debug] Missing element/parser for:", am)
+    end
 end
 
 ai.CustomData=al.__custom or{}

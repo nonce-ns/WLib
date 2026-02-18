@@ -361,7 +361,7 @@ local h=b(game:GetService"HttpService")local i=
 
 d.Heartbeat
 
-local j="https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
+local j="https://raw.githubusercontent.com/nonce-ns/WLib/main/Icons/Main-v2.lua"
 
 local l
 if d:IsStudio()or not writefile then
@@ -4440,7 +4440,7 @@ local ah=ae:AllConfigs()
 for ai,aj in next,ah do
 local fullPath=ae.Path..aj..".json"
 if isfile and isfile(fullPath)then
-ae:CreateConfig(aj,false)
+ae.Configs[aj]=fullPath
 end
 end
 

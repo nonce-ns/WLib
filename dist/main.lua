@@ -4623,7 +4623,10 @@ end
 end
 
 
+-- Only auto-switch if no config is currently active (prevent hijack)
+if not ad.CurrentConfig then
 ai:SetAsCurrent()
+end
 ae.Configs[ag]=ai
 return ai
 end
